@@ -2,11 +2,6 @@
 # system.prop for vince
 #
 
-# ART
-PRODUCT_PROPERTY_OVERRIDES += \
-dalvik.vm.dex2oat-filter=speed \
-dalvik.vm.image-dex2oat-filter=speed
-
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
 persist.audio.calfile0=/vendor/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb \
@@ -21,11 +16,11 @@ audio.deep_buffer.media=true \
 audio.offload.disable=true \
 audio.offload.min.duration.secs=30 \
 audio.offload.video=true \
+ro.vendor.audio.sdk.fluencetype=none \
 persist.vendor.audio.fluence.speaker=true \
 persist.vendor.audio.fluence.voicecall=true \
-persist.vendor.audio.fluence.voicerec=true \
+persist.vendor.audio.fluence.voicerec=false \
 persist.vendor.bt.enable.splita2dp=false \
-ro.vendor.audio.sdk.fluencetype=fluencepro \
 ro.vendor.audio.sdk.ssr=false \
 vendor.audio.flac.sw.decoder.24bit=true \
 vendor.audio.offload.buffer.size.kb=64 \
@@ -68,8 +63,8 @@ sdm.idle_time=1000 \
 vidc.enc.dcvs.extra-buff-count=2 \
 persist.vendor.qti.telephony.vt_cam_interface=1 \
 persist.camera.HAL3.enabled=1 \
-vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap \
-persist.camera.eis.enable=1
+vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.google.android.Redmi4X \
+vendor.camera.aux.packagelist2=com.google.android.GoogleCameraWide,com.android.camera
 
 # Cne/Dpm
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -82,14 +77,19 @@ persist.debug.coresight.config=stm-events
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
+debug.sf.enable_hwc_vds=1 \
+debug.sf.hw=0 \
+debug.sf.latch_unsignaled=1 \
 debug.egl.hw=0 \
-debug.enable.sglscale=1 \
+persist.hwc.mdpcomp.enable=true \
+sdm.debug.disable_skip_validate=1 \
 debug.gralloc.enable_fb_ubwc=1 \
 debug.mdpcomp.logs=0 \
 debug.sf.hw=0 \
 dev.pm.dyn_samplingrate=1 \
 persist.debug.wfd.enable=1 \
 persist.demo.hdmirotationlock=false \
+debug.enable.sglscale=1 \
 persist.hwc.enable_vds=1 \
 persist.hwc.mdpcomp.enable=true \
 ro.opengles.version=196610 \
@@ -132,8 +132,7 @@ vendor.vidc.dec.downscalar_height=1088 \
 vendor.vidc.dec.downscalar_width=1920 \
 vendor.vidc.disable.split.mode=1 \
 vendor.vidc.enc.disable.pq=true \
-vendor.vidc.enc.disable_bframes=1 \
-debug.sf.enable_hwc_vds=1
+vendor.vidc.enc.disable_bframes=1
 
 # Perf
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -162,6 +161,10 @@ persist.rild.nitz_short_ons_3=""
 PRODUCT_PROPERTY_OVERRIDES += \
 vendor.display.enable_default_color_mode=1
 
+# Priv-app permissions whitelist
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.control_privapp_permissions=enforce
+
 # Radio
 PRODUCT_PROPERTY_OVERRIDES += \
 DEVICE_PROVISIONED=1 \
@@ -178,10 +181,12 @@ persist.radio.jbims=0 \
 persist.radio.mt_sms_ack=20 \
 persist.radio.multisim.config=dsds \
 persist.radio.sw_mbn_update=0 \
+persist.radio.aosp_usr_pref_sel=true \
 persist.radio.videopause.mode=1 \
 persist.vendor.radio.custom_ecc=1 \
 persist.vendor.radio.rat_on=combine \
 persist.vendor.radio.sib16_support=1 \
+persist.vendor.radio.add_power_save=1 \
 ril.subscription.types=NV,RUIM \
 rild.libargs=-d/dev/smd0 \
 rild.libpath=/vendor/lib64/libril-qc-qmi-1.so \
@@ -192,8 +197,7 @@ telephony.lteOnCdmaDevice=1
 
 # Time Services
 PRODUCT_PROPERTY_OVERRIDES += \
-persist.timed.enable=true \
-persist.delta_time.enable=true
+persist.timed.enable=true
 
 # Tcp
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -211,12 +215,15 @@ ro.vendor.qti.sys.fw.trim_empty_percent=100 \
 ro.vendor.qti.sys.fw.trim_cache_percent=100 \
 ro.vendor.qti.sys.fw.trim_enable_memory=2147483648
 
-# Higher fling velocities to smooth scrolling
-# and provide better responsiveness
+# Enable B service adj transition by default
 PRODUCT_PROPERTY_OVERRIDES += \
-ro.min.fling_velocity=160 \
-ro.max.fling_velocity=20000
+ro.vendor.qti.sys.fw.bservice_enable=true \
+ro.vendor.qti.sys.fw.bservice_limit=5 \
+ro.vendor.qti.sys.fw.bservice_age=5000
 
-#low audio flinger standby delay to reduce power consumption
+# Dex2oat threads for faster app installation
+# Use all 8 Cores/Threads of our CPU
 PRODUCT_PROPERTY_OVERRIDES += \
-ro.audio.flinger_standbytime_ms=300
+dalvik.vm.dex2oat-threads=8 \
+dalvik.vm.image-dex2oat-threads=8 \
+debug.generate-debug-info=false
